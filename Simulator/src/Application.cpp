@@ -28,6 +28,9 @@ int main()
     
     Planet Sun(640, 512, 0, 0, 0);
     Sun.SpawnMoons(5);
+    for (auto& moon : Sun.GetChildPlanets())
+        moon.SpawnMoons(2);
+    
 
     while (window.isOpen())
     {

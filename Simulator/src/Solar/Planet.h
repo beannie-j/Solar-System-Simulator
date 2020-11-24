@@ -40,8 +40,11 @@ public:
 
 	void SpawnMoons(const uint16_t& number);
 	void Draw(sf::RenderWindow& window);
+	void DrawChildPlanets(sf::RenderWindow& window, std::vector<Planet> childPlanets);
 
 	void Orbit();
+
+	std::vector<Planet> GetChildPlanets() { return m_ChildPlanets; }
 
 };
 

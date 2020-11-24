@@ -58,9 +58,14 @@ void Planet::Draw(sf::RenderWindow &window)
 	planet.rotate(m_Angle);
 	window.draw(planet);
 
-	if (!m_ChildPlanets.empty())
+	DrawChildPlanets(window, m_ChildPlanets);
+}
+
+void Planet::DrawChildPlanets(sf::RenderWindow& window, std::vector<Planet> childPlanets)
+{
+	if (!childPlanets.empty())
 	{
-		for (const auto& moon : m_ChildPlanets)
+		for (const auto& moon : childPlanets)
 		{
 			sf::CircleShape moonShape(30.f);
 			moonShape.setFillColor(sf::Color(204, 204, 204));	// Moon

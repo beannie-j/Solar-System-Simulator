@@ -22,6 +22,7 @@ void Planet::SpawnMoons(const uint16_t& number)
 	int lowBounds = 30, highBounds = 150;
 	int lowAngle = 0, highAngle = 180;
 	int lowDirs = 0, highDirs = 1;
+	float lowOrbitSpeed = 0.05, highOrbitSpeed = 0.2;
 
 	int directions[2] = { 1, -1 };
 
@@ -30,6 +31,8 @@ void Planet::SpawnMoons(const uint16_t& number)
 	std::uniform_int_distribution<> distrDistance(lowBounds, highBounds);
 	std::uniform_int_distribution<> distrAngle(lowAngle, highAngle);
 	std::uniform_int_distribution<> distrDirections(lowDirs, highDirs);
+	std::uniform_real_distribution<float> distrOrbitSpeed(lowOrbitSpeed, highOrbitSpeed);
+
 
 	for (int i = 0; i < number; i++)
 	{
@@ -37,12 +40,13 @@ void Planet::SpawnMoons(const uint16_t& number)
 		int randomAngle = distrAngle(gen);
 		int randomDirectionX = distrDirections(gen);
 		int randomDirectionY = distrDirections(gen);
+		float randomOrbitSpeed = distrOrbitSpeed(gen);
 
-		std::cout << "random angle " << randomAngle << ", random distance " << randomDistance << " random dir x : " << directions[randomDirectionX] << " random dir y : " << directions[randomDirectionY] << std::endl;
+		std::cout << "random angle " << randomAngle << ", random distance " << randomDistance << " random dir x : " << directions[randomDirectionX] << " random dir y : " << directions[randomDirectionY] << "random orbit speed " << randomOrbitSpeed << std::endl;
 
 		int posX = m_Position.x + (directions[randomDirectionX] * randomDistance);
 		int posY = m_Position.y + (directions[randomDirectionY] * randomDistance);
-		m_ChildPlanets.push_back(Planet(posX, posY, randomDistance, randomAngle, 0.3));
+		m_ChildPlanets.push_back(Planet(posX, posY, randomDistance, randomAngle, randomOrbitSpeed));
 	}
 }
 
@@ -60,6 +64,7 @@ void Planet::Draw(sf::RenderWindow &window)
 		{
 			sf::CircleShape moonShape(30.f);
 			moonShape.setFillColor(sf::Color(204, 204, 204));	// Moon
+			moonShape.setOrigin(m_Position.x, m_Position.y);
 			moonShape.setPosition(moon.m_Position.x, moon.m_Position.y);
 			moonShape.rotate(moon.m_Angle);
 			window.draw(moonShape);

@@ -24,7 +24,7 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1280, 1024), "Solar System");
+    sf::RenderWindow window(sf::VideoMode(1600, 1200), "Solar System");
     
     Planet Sun(640, 512, 0, 0, 0);
     Sun.SpawnMoons(5);

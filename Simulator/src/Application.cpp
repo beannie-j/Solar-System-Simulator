@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+/*
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -15,13 +16,51 @@
 #include "VertexBufferLayout.h"
 #include "Shader.h"
 #include "Texture.h"
+*/
 
+#include "Planet.h"
 
+#include <SFML/Graphics.hpp>
+
+int main()
+{
+    sf::RenderWindow window(sf::VideoMode(1280, 1024), "Solar System");
+    
+    Planet Sun(640, 512, 0, 0, 0);
+    Sun.SpawnMoons(5);
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        window.clear();
+
+        Sun.Orbit();
+        Sun.Draw(window);
+
+        window.display();
+    }
+
+    return 0;
+}
+
+/*
+    *   Commented OpenGL code
+    * 
+    * 
+    * 
+    * 
+/*
 int main(void)
 {
     GLFWwindow* window;
 
-    /* Initialize the library */
+    //Initialize the library
     if (!glfwInit())
         return -1;
 
@@ -29,7 +68,7 @@ int main(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    /* Create a windowed mode window and its OpenGL context */
+    //Create a windowed mode window and its OpenGL context
     window = glfwCreateWindow(1280, 1024, "Solar System Simulator", NULL, NULL);
     if (!window)
     {
@@ -37,7 +76,7 @@ int main(void)
         return -1;
     }
 
-    /* Make the window's context current */
+    //Make the window's context current
     glfwMakeContextCurrent(window);
 
     glfwSwapInterval(1);
@@ -48,10 +87,10 @@ int main(void)
     std::cout << glGetString(GL_VERSION) << std::endl;
 
     float positions[] = {
-            -0.5f, -0.5f, 0.0f, 0.0f,
-            0.5f, -0.5f, 1.0f, 0.0f,
-            0.5f, 0.5f, 1.0f, 1.0f,
-            -0.5f, 0.5f, 0.0f, 1.0f
+            -0.5f,  -0.5f,  0.0f,  // bottom left
+            0.5f,   -0.5f,  0.0f,  // bottom right
+            0.5f,   0.5f,   0.0f, // top right
+            -0.5f,  0.5f,   0.0f// top left
     };
 
     unsigned int indices[] = {
@@ -67,15 +106,14 @@ int main(void)
     GLCall(glBindVertexArray(vao));
 
     VertexArray va;
-    VertexBuffer vb(positions, 4 * 4 * sizeof(float));
+    VertexBuffer vb(positions, 4 * 2 * sizeof(float));
 
     VertexBufferLayout layout;
-    layout.Push<float>(2);
-    layout.Push<float>(2);
+    layout.Push<float>(3);
 
     va.AddBuffer(vb, layout);
 
-    IndexBuffer ib(indices, 6);
+    IndexBuffer ib(indices, 12);
 
     Shader shader("Simulator/res/shaders/Basic.shader");
     shader.Bind();
@@ -94,10 +132,10 @@ int main(void)
 
     float r = 0.0f;
     float increment = 0.05f;
-    /* Loop until the user closes the window */
+    //Loop until the user closes the window
     while (!glfwWindowShouldClose(window))
     {
-        /* Render here */
+        //Render here
         renderer.Clear();
 
         shader.Bind();
@@ -112,13 +150,15 @@ int main(void)
 
         r += increment;
 
-        /* Swap front and back buffers */
+        //Swap front and back buffers
         glfwSwapBuffers(window);
 
-        /* Poll for and process events */
+        //Poll for and process events
         glfwPollEvents();
     }
 
     glfwTerminate();
     return 0;
+    
 }
+*/

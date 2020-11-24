@@ -1,3 +1,4 @@
+/*
 #include "Texture.h"
 #include "stb_image.h"
 
@@ -37,3 +38,4 @@ void Texture::Unbind() const
 {
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 }
+*/

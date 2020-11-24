@@ -24,17 +24,24 @@ project "SolarSystemSimulator"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-
 	files 
 	{ 
 		"%{prj.location}/Simulator/src/**.h", 
 		"%{prj.location}/Simulator/src/**.c", 
 		"%{prj.location}/Simulator/src/**.hpp", 
 		"%{prj.location}/Simulator/src/**.cpp",
+		--"%{prj.location}/Simulator/src/vendor/stb_image/**.cpp",
+		--"%{prj.location}/Simulator/src/vendor/stb_image/**.h",
+		"%{prj.location}/Simulator/res/shaders/**.*",
+		"%{prj.location}/Simulator/res/textures/**.*",
+		"%{prj.location}/Simulator/src/Solar/**.h",
+		"%{prj.location}/Simulator/src/Solar/**.cpp"
+	}
+
+	excludes 
+	{
 		"%{prj.location}/Simulator/src/vendor/stb_image/**.cpp",
 		"%{prj.location}/Simulator/src/vendor/stb_image/**.h",
-		"%{prj.location}/Simulator/res/shaders/**.*",
-		"%{prj.location}/Simulator/res/textures/**.*"
 	}
 
 	includedirs
@@ -43,12 +50,21 @@ project "SolarSystemSimulator"
 		"%{prj.location}/Dependencies/GLEW/include",
 		"%{prj.location}/Dependencies/GLFW/include",
 		"%{prj.location}/Simulator/src",
-		"%{prj.location}/Simulator/src/vendor/stb_image"
+		--"%{prj.location}/Simulator/src/vendor/stb_image",
+		"%{prj.location}/Simulator/src/Solar",
+		"%{prj.location}/Dependencies/SFML/include"
 	}
 	
 	links 
-	{ 
-		"glfw3.lib","opengl32.lib","User32.lib","Gdi32.lib","Shell32.lib","glew32s.lib"
+	{	-- OPENGL libs
+		"glfw3.lib","opengl32.lib","User32.lib","Gdi32.lib","Shell32.lib","glew32s.lib",
+		-- SFML libs
+		"openal32.lib","sfml-audio-s-d.lib","ogg.lib","vorbis.lib","vorbisfile.lib","vorbisenc.lib","flac.lib","sfml-main-d.lib",
+		"ws2_32.lib","gdi32.lib","winmm.lib","freetype.lib","sfml-network-s-d.lib",
+		"sfml-graphics-s-d.lib","sfml-window-s-d.lib","sfml-system-s-d.lib","kernel32.lib","user32.lib",
+		"gdi32.lib","winspool.lib","comdlg32.lib","advapi32.lib","shell32.lib","ole32.lib","oleaut32.lib",
+		"uuid.lib","odbc32.lib","odbccp32.lib"
+
 	}
 	
 	filter "system:windows"
@@ -58,12 +74,15 @@ project "SolarSystemSimulator"
 		
 		defines 
 		{ 
-			"GLEW_STATIC","WIN32"
+			"GLEW_STATIC","WIN32","SFML_STATIC"
 		}
 
 		libdirs
 		{
-			"%{prj.location}/Dependencies/GLFW/lib-vc2019", "%{prj.location}/Dependencies/GLEW/lib/Release/Win32"
+			"%{prj.location}/Dependencies/GLFW/lib-vc2019", 
+			"%{prj.location}/Dependencies/GLEW/lib/Release/Win32",
+			"%{prj.location}/Dependencies/SFML/lib",
+			"%{prj.location}/Dependencies/SFML/bin"
 		}
 
 				
@@ -75,3 +94,5 @@ project "SolarSystemSimulator"
       	defines { "NDEBUG" }
       	optimize "On"
 
+	configuration "windows"
+   	postbuildcommands { "copy %{prj.location}Dependencies\\SFML\\bin\\openal32.dll %{prj.location}bin\\" .. outputdir .. "\\%{prj.name}" }

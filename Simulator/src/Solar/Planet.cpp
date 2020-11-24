@@ -19,7 +19,7 @@ Planet::~Planet()
 
 void Planet::SpawnMoons(const uint16_t& number)
 {
-	int lowBounds = 30, highBounds = 150;
+	int lowBounds = 10, highBounds = 15;
 	int lowAngle = 0, highAngle = 180;
 	int lowDirs = 0, highDirs = 1;
 	float lowOrbitSpeed = 0.05, highOrbitSpeed = 0.2;

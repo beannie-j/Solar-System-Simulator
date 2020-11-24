@@ -4,7 +4,7 @@
 #include <random>
 
 Planet::Planet()
-	: m_Position(Vector3f()), m_Velocity(Vector3f()), m_Force(Vector3f()), m_Radius(0), m_Mass(0), m_Distance(0), m_Angle(0)
+	: m_Position(Vector3f()), m_Velocity(Vector3f()), m_Force(Vector3f()), m_Radius(0), m_Mass(0), m_Distance(0), m_Angle(0), m_OrbitSpeed(0)
 {
 }
 

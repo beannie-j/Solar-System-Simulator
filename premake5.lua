@@ -52,7 +52,8 @@ project "SolarSystemSimulator"
 		"%{prj.location}/Simulator/src",
 		--"%{prj.location}/Simulator/src/vendor/stb_image",
 		"%{prj.location}/Simulator/src/Solar",
-		"%{prj.location}/Dependencies/SFML/include"
+		"%{prj.location}/Dependencies/SFML/include",
+		"%{prj.location}/Dependencies/glm/include"
 	}
 	
 	links 

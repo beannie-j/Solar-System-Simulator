@@ -3,7 +3,13 @@
 
 void GLClearError()
 {
-    while (glGetError() != GL_NO_ERROR);
+    uint32_t maxIteration = 10;
+    uint32_t i = 0;
+    while (glGetError() != GL_NO_ERROR)
+    {
+        if (i++ > maxIteration)
+            break;
+    }
 }
 
 bool GLLogCall(const char* function, const char* file, int line)
@@ -19,7 +25,7 @@ bool GLLogCall(const char* function, const char* file, int line)
 
 void Renderer::Clear() const
 {
-    GLCall(glClear(GL_COLOR_BUFFER_BIT));
+    GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 
 void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const

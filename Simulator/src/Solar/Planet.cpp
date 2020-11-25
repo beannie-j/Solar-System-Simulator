@@ -33,7 +33,6 @@ void Planet::SpawnMoons(const uint16_t& number)
 	std::uniform_int_distribution<> distrDirections(lowDirs, highDirs);
 	std::uniform_real_distribution<float> distrOrbitSpeed(lowOrbitSpeed, highOrbitSpeed);
 
-
 	for (int i = 0; i < number; i++)
 	{
 		int randomDistance = distrDistance(gen); // Random distance of the moons from planet.
@@ -46,7 +45,10 @@ void Planet::SpawnMoons(const uint16_t& number)
 
 		int posX = m_Position.x + (directions[randomDirectionX] * randomDistance);
 		int posY = m_Position.y + (directions[randomDirectionY] * randomDistance);
-		m_ChildPlanets.push_back(Planet(posX, posY, randomDistance, randomAngle, randomOrbitSpeed));
+		std::cout << "pos x " << posX << ", pos y " << posY << std::endl;
+		//m_ChildPlanets.push_back(Planet(posX, posY, randomDistance, randomAngle, randomOrbitSpeed));
+		m_ChildPlanets.push_back(Planet(posX, posY, 10, 0, randomOrbitSpeed));
+
 	}
 }
 

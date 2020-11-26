@@ -31,23 +31,24 @@ private:
 	float m_Angle;
 	float m_OrbitSpeed;
 	std::vector<Planet> m_ChildPlanets;
-
-	sf::Texture texture;
+	sf::Texture* m_Texture = nullptr;
 
 
 public:
 	// rendering in 2d for now
 	Planet();
-	Planet(float x, float y, float distance, uint32_t angle, float orbitSpeed, float z = 0);
+	Planet(float x, float y, float distance, uint32_t angle, float orbitSpeed, float radius, float z = 0);
 	~Planet();
 
 	void SpawnMoons(const uint16_t& number);
 	void Draw(sf::RenderWindow& window);
-	void DrawChildPlanets(sf::RenderWindow& window, std::vector<Planet> childPlanets);
 	
 	void Orbit();
+	void Orbit(const Planet& planet);
+	void SetTexture(std::string filepath);
 
 	std::vector<Planet> GetChildPlanets() { return m_ChildPlanets; }
+	float GetRadius() { return m_Radius; }
 
 };
 

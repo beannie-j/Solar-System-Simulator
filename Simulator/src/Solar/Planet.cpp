@@ -7,11 +7,13 @@
 Planet::Planet()
 	: m_Position(Vector3f()), m_Velocity(Vector3f()), m_Force(Vector3f()), m_Radius(0), m_Mass(0), m_Distance(0), m_Angle(0), m_OrbitSpeed(0)
 {
+	m_Texture = new sf::Texture();
 }
 
-Planet::Planet(float x, float y, float distance, uint32_t angle, float orbitSpeed, float z)
-	: m_Position(x, y, z), m_Distance(distance), m_Angle(angle), m_Velocity(Vector3f()), m_Force(Vector3f()), m_Radius(0), m_Mass(0), m_OrbitSpeed(orbitSpeed)
+Planet::Planet(float x, float y, float distance, uint32_t angle, float orbitSpeed, float radius, float z)
+	: m_Position(x, y, z), m_Distance(distance), m_Angle(angle), m_Velocity(Vector3f()), m_Force(Vector3f()), m_Radius(radius), m_Mass(0), m_OrbitSpeed(orbitSpeed)
 {
+	m_Texture = new sf::Texture();
 }
 
 Planet::~Planet()
@@ -47,63 +49,41 @@ void Planet::SpawnMoons(const uint16_t& number)
 		//int posY = m_Position.y + (directions[randomDirectionY] * randomDistance);
 		//std::cout << "pos x " << posX << ", pos y " << posY << std::endl;
 		//m_ChildPlanets.push_back(Planet(posX, posY, randomDistance, randomAngle, randomOrbitSpeed));
-		m_ChildPlanets.push_back(Planet(m_Position.x + 100.f, m_Position.y + 100.f, 10, 0, randomOrbitSpeed));
+		m_ChildPlanets.push_back(Planet(m_Position.x + 100.f, m_Position.y + 100.f, 10, 0, randomOrbitSpeed, 30.0f));
 	}
-
-	
-	texture.loadFromFile("Simulator/res/assets/sunmap.jpg");
-
 }
-
-
 
 void Planet::Draw(sf::RenderWindow &window)
 {
-	sf::CircleShape planet(100.f);
+	sf::CircleShape planet(m_Radius);
+	planet.setOrigin(m_Distance + (m_Radius / 3), m_Distance + (m_Radius / 3));
 	planet.setPosition(m_Position.x, m_Position.y);
-
-	//planet.setFillColor(sf::Color(253, 184, 19));	// Sun
-
-	
-	planet.setTexture(&texture, true);
-
-
-
-	
-	//planet.rotate(m_Angle);
+	planet.setTexture(m_Texture, true);
+	//planet.setOrigin(m_Distance, m_Distance);
+	planet.rotate(m_Angle);
 	window.draw(planet);
 
-	DrawChildPlanets(window, m_ChildPlanets);
-}
-
-void Planet::DrawChildPlanets(sf::RenderWindow& window, std::vector<Planet> childPlanets)
-{
-	if (!childPlanets.empty())
-	{
-		for (const auto& moon : childPlanets)
-		{
-			sf::CircleShape moonShape(30.f);
-			moonShape.setFillColor(sf::Color(204, 204, 204));	// Moon
-			moonShape.setOrigin(250, 250);
-			moonShape.setPosition(moon.m_Position.x, moon.m_Position.y);
-			moonShape.rotate(moon.m_Angle);
-			window.draw(moonShape);
-		}
-	}
+	//DrawChildPlanets(window, m_ChildPlanets);
 }
 
 void Planet::Orbit()
 {
 	float& angle = m_Angle;
 	float orbitSpeed = m_OrbitSpeed;
+	angle -= orbitSpeed; // + for clockwise, - for anti clockwise
 
-	angle += orbitSpeed; // + for clockwise, - for anti clockwise
+}
 
-	if (!m_ChildPlanets.empty())
-	{
-		for (auto& moon : m_ChildPlanets)
-		{
-			moon.Orbit();
-		}
-	}
+void Planet::Orbit(const Planet& planet)
+{
+	float& angle = m_Angle;
+	float orbitSpeed = m_OrbitSpeed;
+	angle -= orbitSpeed;
+}
+
+void Planet::SetTexture(std::string filepath)
+{
+//if (!m_Texture->loadFromFile("Simulator/res/assets/img/sunmap.jpg"))
+	if (!m_Texture->loadFromFile(filepath))
+		std::cout << "[Error] : Could not load background texture" << std::endl;
 }

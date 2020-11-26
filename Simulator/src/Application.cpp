@@ -42,29 +42,53 @@
 
 int main()
 {
-    int width = 1280;
-    int height = 1024;
+    int width = 1900;
+    int height = 1200;
+
+    int div = 2.8;
 
     sf::RenderWindow window(sf::VideoMode(width, height), "Solar System");
 
-    Planet Sun(width / 2, height / 2, 0, 0, 0);
-    Sun.SpawnMoons(1);
+    //Planet::Planet(float x, float y, float distance, uint32_t angle, float orbitSpeed, float radius, //float z)
+    Planet Sun(width / div, height / div, 0, 0, 0, 50);
+    Sun.SetTexture("Simulator/res/assets/img/sunmap.jpg");
 
-    sf::CircleShape red(1.f);
-    red.setFillColor(sf::Color::Red);	// Moon
-    red.setPosition(width / 2 + 100, height / 2 + 100);
+    float relativeToSunX = (width / div) + Sun.GetRadius();
+    float relativeToSunY = (height / div) + Sun.GetRadius();
 
-    /*for (auto& moon : Sun.GetChildPlanets())
-        moon.SpawnMoons(2);
-        */
+    Planet Mercury(relativeToSunX - 30.0f, relativeToSunY - 30.0f, 110, 0, 0.3, 30.0f);
+    Mercury.SetTexture("Simulator/res/assets/img/mercurymap.jpg");
+
+    Planet Venus(relativeToSunX - 30.0f, relativeToSunY - 30.0f, 160, 0, 0.19, 30.0f);
+    Venus.SetTexture("Simulator/res/assets/img/venusmap.jpg");
+
+    Planet Earth(relativeToSunX - 30.0f, relativeToSunY - 30.0f, 210, 0, 0.11, 30.0f);
+    Earth.SetTexture("Simulator/res/assets/img/earthmap1k.jpg");
+
+    Planet Mars(relativeToSunX - 15.0f, relativeToSunY - 15.0f, 250, 0, 0.12, 15.0f);
+    Mars.SetTexture("Simulator/res/assets/img/mars_1k_color.jpg");
+
+    Planet Jupiter(relativeToSunX - 15.0f, relativeToSunY - 15.0f, 300, 10.f, 0.1211, 45.0f);
+    Jupiter.SetTexture("Simulator/res/assets/img/jupitermap.jpg");
+
+    Planet Saturn(relativeToSunX - 15.0f, relativeToSunY - 15.0f, 350, 0, 0.1091, 45.0f);
+    Saturn.SetTexture("Simulator/res/assets/img/saturnmap.jpg");
+
+    Planet Uranus(relativeToSunX - 15.0f, relativeToSunY - 15.0f, 400, 0, 0.12234, 35.0f);
+    Uranus.SetTexture("Simulator/res/assets/img/uranusmap.jpg");
+
+    Planet Neptune(relativeToSunX - 15.0f, relativeToSunY - 15.0f, 450, 0, 0.093, 30.0f);
+    Neptune.SetTexture("Simulator/res/assets/img/neptunemap.jpg");
+
+    Planet Pluto(relativeToSunX - 15.0f, relativeToSunY - 15.0f, 500, 0, 0.1973, 30.0f);
+    Pluto.SetTexture("Simulator/res/assets/img/plutomap1k.jpg");
 
     sf::Texture backgroundTexture;
 
-    if (!backgroundTexture.loadFromFile("Simulator/res/assets/milkyway.jpg"))
+    if (!backgroundTexture.loadFromFile("Simulator/res/assets/img/milkyway.jpg"))
         std::cout << "[Error] : Could not load background texture" << std::endl;
 
     sf::Sprite backgroundSprite = sf::Sprite(backgroundTexture);
-
 
     while (window.isOpen())
     {
@@ -79,9 +103,26 @@ int main()
         window.clear();
         window.draw(backgroundSprite);
 
-        Sun.Orbit();
+        Jupiter.Orbit();
+        Saturn.Orbit();
+        Uranus.Orbit();
+        Neptune.Orbit();
+        Pluto.Orbit();
+        Mars.Orbit();
+        Mercury.Orbit();
+        Venus.Orbit();
+        Earth.Orbit();
+
         Sun.Draw(window);
-        window.draw(red);
+        Mercury.Draw(window);
+        Venus.Draw(window);
+        Earth.Draw(window);
+        Mars.Draw(window);
+        Jupiter.Draw(window);
+        Saturn.Draw(window);
+        Uranus.Draw(window);
+        Neptune.Draw(window);
+        Pluto.Draw(window);
 
         window.display();
     }

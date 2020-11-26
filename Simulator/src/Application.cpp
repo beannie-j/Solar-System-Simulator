@@ -56,7 +56,7 @@ int main()
     float relativeToSunX = (width / div) + Sun.GetRadius();
     float relativeToSunY = (height / div) + Sun.GetRadius();
 
-    Planet Mercury(relativeToSunX - 30.0f, relativeToSunY - 30.0f, 110, 0, 0.3, 30.0f);
+    Planet Mercury(relativeToSunX - 30.0f, relativeToSunY - 30.0f, 110, 0, 0.35, 30.0f);
     Mercury.SetTexture("Simulator/res/assets/img/mercurymap.jpg");
 
     Planet Venus(relativeToSunX - 30.0f, relativeToSunY - 30.0f, 160, 0, 0.19, 30.0f);
@@ -68,10 +68,10 @@ int main()
     Planet Mars(relativeToSunX - 15.0f, relativeToSunY - 15.0f, 250, 0, 0.12, 15.0f);
     Mars.SetTexture("Simulator/res/assets/img/mars_1k_color.jpg");
 
-    Planet Jupiter(relativeToSunX - 15.0f, relativeToSunY - 15.0f, 300, 10.f, 0.1211, 45.0f);
+    Planet Jupiter(relativeToSunX - 15.0f, relativeToSunY - 15.0f, 300, 10.f, 0.13, 45.0f);
     Jupiter.SetTexture("Simulator/res/assets/img/jupitermap.jpg");
 
-    Planet Saturn(relativeToSunX - 15.0f, relativeToSunY - 15.0f, 350, 0, 0.1091, 45.0f);
+    Planet Saturn(relativeToSunX - 15.0f, relativeToSunY - 15.0f, 350, 0, 0.14, 45.0f);
     Saturn.SetTexture("Simulator/res/assets/img/saturnmap.jpg");
 
     Planet Uranus(relativeToSunX - 15.0f, relativeToSunY - 15.0f, 400, 0, 0.12234, 35.0f);

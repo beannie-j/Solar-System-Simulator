@@ -17,10 +17,9 @@ Planet::Planet(float x, float y, float distance, uint32_t angle, float orbitSpee
 Planet::~Planet()
 {
 }
-
 void Planet::SpawnMoons(const uint16_t& number)
 {
-	int lowBounds = 10, highBounds = 15;
+	int lowBounds = 150, highBounds = 250;
 	int lowAngle = 0, highAngle = 180;
 	int lowDirs = 0, highDirs = 1;
 	float lowOrbitSpeed = 0.05, highOrbitSpeed = 0.2;
@@ -50,13 +49,27 @@ void Planet::SpawnMoons(const uint16_t& number)
 		//m_ChildPlanets.push_back(Planet(posX, posY, randomDistance, randomAngle, randomOrbitSpeed));
 		m_ChildPlanets.push_back(Planet(m_Position.x + 100.f, m_Position.y + 100.f, 10, 0, randomOrbitSpeed));
 	}
+
+	
+	texture.loadFromFile("Simulator/res/assets/sunmap.jpg");
+
 }
+
+
 
 void Planet::Draw(sf::RenderWindow &window)
 {
 	sf::CircleShape planet(100.f);
-	planet.setFillColor(sf::Color(253, 184, 19));	// Sun
 	planet.setPosition(m_Position.x, m_Position.y);
+
+	//planet.setFillColor(sf::Color(253, 184, 19));	// Sun
+
+	
+	planet.setTexture(&texture, true);
+
+
+
+	
 	//planet.rotate(m_Angle);
 	window.draw(planet);
 
@@ -71,7 +84,7 @@ void Planet::DrawChildPlanets(sf::RenderWindow& window, std::vector<Planet> chil
 		{
 			sf::CircleShape moonShape(30.f);
 			moonShape.setFillColor(sf::Color(204, 204, 204));	// Moon
-			moonShape.setOrigin(150, 150);
+			moonShape.setOrigin(250, 250);
 			moonShape.setPosition(moon.m_Position.x, moon.m_Position.y);
 			moonShape.rotate(moon.m_Angle);
 			window.draw(moonShape);
@@ -84,7 +97,7 @@ void Planet::Orbit()
 	float& angle = m_Angle;
 	float orbitSpeed = m_OrbitSpeed;
 
-	angle += orbitSpeed;
+	angle += orbitSpeed; // + for clockwise, - for anti clockwise
 
 	if (!m_ChildPlanets.empty())
 	{

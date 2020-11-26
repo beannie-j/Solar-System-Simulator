@@ -32,6 +32,9 @@ private:
 	float m_OrbitSpeed;
 	std::vector<Planet> m_ChildPlanets;
 
+	sf::Texture texture;
+
+
 public:
 	// rendering in 2d for now
 	Planet();

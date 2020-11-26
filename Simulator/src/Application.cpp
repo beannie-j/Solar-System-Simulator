@@ -1,5 +1,4 @@
-#include "Application.h"
-
+#if 0
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -16,32 +15,60 @@
 #include "Shader.h"
 #include "Texture.h"
 
-#include "Planet.h"
-
-#include <SFML/Graphics.hpp>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#endif
 
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/OpenGL.hpp>
+
+#include <glm/vec3.hpp> // glm::vec3
+#include <glm/vec4.hpp> // glm::vec4
+#include <glm/mat4x4.hpp> // glm::mat4
+#include <glm/ext/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale
+#include <glm/ext/matrix_clip_space.hpp> // glm::perspective
+#include <glm/ext/scalar_constants.hpp> // glm::pi
+#include <glm/gtc/type_ptr.hpp>
+
+#include <iostream>
+
+#include "Application.h"
+#include "Planet.h"
+
+/*
+    * All images are from http://planetpixelemporium.com/sun.html
+*/
 
 int main()
 {
     int width = 1280;
     int height = 1024;
+
     sf::RenderWindow window(sf::VideoMode(width, height), "Solar System");
-    
+
     Planet Sun(width / 2, height / 2, 0, 0, 0);
     Sun.SpawnMoons(1);
 
     sf::CircleShape red(1.f);
     red.setFillColor(sf::Color::Red);	// Moon
     red.setPosition(width / 2 + 100, height / 2 + 100);
-    
+
     /*for (auto& moon : Sun.GetChildPlanets())
         moon.SpawnMoons(2);
         */
+
+    sf::Texture backgroundTexture;
+
+    if (!backgroundTexture.loadFromFile("Simulator/res/assets/milkyway.jpg"))
+        std::cout << "[Error] : Could not load background texture" << std::endl;
+
+    sf::Sprite backgroundSprite = sf::Sprite(backgroundTexture);
+
+
     while (window.isOpen())
     {
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -50,6 +77,7 @@ int main()
         }
 
         window.clear();
+        window.draw(backgroundSprite);
 
         Sun.Orbit();
         Sun.Draw(window);

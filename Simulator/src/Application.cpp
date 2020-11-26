@@ -23,18 +23,23 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#if 0
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1600, 1200), "Solar System");
+    int width = 1280;
+    int height = 1024;
+    sf::RenderWindow window(sf::VideoMode(width, height), "Solar System");
     
-    Planet Sun(640, 512, 0, 0, 0);
-    Sun.SpawnMoons(5);
-    for (auto& moon : Sun.GetChildPlanets())
-        moon.SpawnMoons(2);
-    
+    Planet Sun(width / 2, height / 2, 0, 0, 0);
+    Sun.SpawnMoons(1);
 
+    sf::CircleShape red(1.f);
+    red.setFillColor(sf::Color::Red);	// Moon
+    red.setPosition(width / 2 + 100, height / 2 + 100);
+    
+    /*for (auto& moon : Sun.GetChildPlanets())
+        moon.SpawnMoons(2);
+        */
     while (window.isOpen())
     {
         sf::Event event;
@@ -48,13 +53,14 @@ int main()
 
         Sun.Orbit();
         Sun.Draw(window);
+        window.draw(red);
 
         window.display();
     }
 
     return 0;
 }
-#else
+#if 0
 int main(void)
 {
     GLFWwindow* window;

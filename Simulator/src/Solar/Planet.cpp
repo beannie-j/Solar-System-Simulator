@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <random>
+#include <cmath>
 
 Planet::Planet()
 	: m_Position(Vector3f()), m_Velocity(Vector3f()), m_Force(Vector3f()), m_Radius(0), m_Mass(0), m_Distance(0), m_Angle(0), m_OrbitSpeed(0)
@@ -43,12 +44,11 @@ void Planet::SpawnMoons(const uint16_t& number)
 
 		std::cout << "random angle " << randomAngle << ", random distance " << randomDistance << " random dir x : " << directions[randomDirectionX] << " random dir y : " << directions[randomDirectionY] << "random orbit speed " << randomOrbitSpeed << std::endl;
 
-		int posX = m_Position.x + (directions[randomDirectionX] * randomDistance);
-		int posY = m_Position.y + (directions[randomDirectionY] * randomDistance);
-		std::cout << "pos x " << posX << ", pos y " << posY << std::endl;
+		//int posX = m_Position.x + (directions[randomDirectionX] * randomDistance);
+		//int posY = m_Position.y + (directions[randomDirectionY] * randomDistance);
+		//std::cout << "pos x " << posX << ", pos y " << posY << std::endl;
 		//m_ChildPlanets.push_back(Planet(posX, posY, randomDistance, randomAngle, randomOrbitSpeed));
-		m_ChildPlanets.push_back(Planet(posX, posY, 10, 0, randomOrbitSpeed));
-
+		m_ChildPlanets.push_back(Planet(m_Position.x + 100.f, m_Position.y + 100.f, 10, 0, randomOrbitSpeed));
 	}
 }
 
@@ -57,7 +57,7 @@ void Planet::Draw(sf::RenderWindow &window)
 	sf::CircleShape planet(100.f);
 	planet.setFillColor(sf::Color(253, 184, 19));	// Sun
 	planet.setPosition(m_Position.x, m_Position.y);
-	planet.rotate(m_Angle);
+	//planet.rotate(m_Angle);
 	window.draw(planet);
 
 	DrawChildPlanets(window, m_ChildPlanets);
@@ -71,7 +71,7 @@ void Planet::DrawChildPlanets(sf::RenderWindow& window, std::vector<Planet> chil
 		{
 			sf::CircleShape moonShape(30.f);
 			moonShape.setFillColor(sf::Color(204, 204, 204));	// Moon
-			moonShape.setOrigin(m_Position.x, m_Position.y);
+			moonShape.setOrigin(150, 150);
 			moonShape.setPosition(moon.m_Position.x, moon.m_Position.y);
 			moonShape.rotate(moon.m_Angle);
 			window.draw(moonShape);

@@ -35,7 +35,9 @@ project "SolarSystemSimulator"
 		"%{prj.location}/Simulator/res/shaders/**.*",
 		"%{prj.location}/Simulator/res/textures/**.*",
 		"%{prj.location}/Simulator/src/Solar/**.h",
-		"%{prj.location}/Simulator/src/Solar/**.cpp"
+		"%{prj.location}/Simulator/src/Solar/**.cpp",
+		"%{prj.location}/Simulator/src/Graphics/**.h",
+		"%{prj.location}/Simulator/src/Graphics/**.cpp"
 	}
 
 	excludes 
@@ -53,7 +55,8 @@ project "SolarSystemSimulator"
 		--"%{prj.location}/Simulator/src/vendor/stb_image",
 		"%{prj.location}/Simulator/src/Solar",
 		"%{prj.location}/Dependencies/SFML/include",
-		"%{prj.location}/Dependencies/glm/include"
+		"%{prj.location}/Dependencies/glm/include",
+		"%{prj.location}/Simulator/src/Graphics",
 	}
 	
 	links 

@@ -37,7 +37,7 @@
 #include "Planet.h"
 
 /*
-    * All images are from http://planetpixelemporium.com/sun.html
+    * All images are from http://planetpixelemporium.com
 */
 
 int main()
@@ -49,7 +49,6 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(width, height), "Solar System");
 
-    //Planet::Planet(float x, float y, float distance, uint32_t angle, float orbitSpeed, float radius, //float z)
     Planet Sun(width / div, height / div, 0, 0, 0, 50);
     Sun.SetTexture("Simulator/res/assets/img/sunmap.jpg");
 

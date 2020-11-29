@@ -1,24 +1,7 @@
+/*
+* SFML version
+*/
 #if 0
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
-
-#include "Renderer.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "VertexArray.h"
-#include "VertexBufferLayout.h"
-#include "Shader.h"
-#include "Texture.h"
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#endif
-
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/OpenGL.hpp>
@@ -38,6 +21,10 @@
 
 /*
     * All images are from http://planetpixelemporium.com
+*/
+
+/*
+* SFML version
 */
 
 int main()
@@ -128,7 +115,31 @@ int main()
 
     return 0;
 }
-#if 0
+#endif
+
+/*
+* OpenGL
+*/
+//#if 0
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+
+#include "Renderer.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+#include "VertexArray.h"
+#include "VertexBufferLayout.h"
+#include "Shader.h"
+#include "Texture.h"
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 int main(void)
 {
     GLFWwindow* window;
@@ -144,6 +155,7 @@ int main(void)
     //Create a windowed mode window and its OpenGL context
     int width = 1280;
     int height = 1024;
+
     window = glfwCreateWindow(width, height, "Solar System Simulator", NULL, NULL);
     if (!window)
     {
@@ -160,7 +172,6 @@ int main(void)
         return -1;
 
     std::cout << glGetString(GL_VERSION) << std::endl;
-
 
     float positions[] = {
             // Front
@@ -296,4 +307,4 @@ int main(void)
     return 0;
     
 }
-#endif
+//#endif

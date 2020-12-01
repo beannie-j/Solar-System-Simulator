@@ -27,6 +27,7 @@ uniform vec4 u_Color;
 
 void main()
 {
+	vec4 u_Color = u_Color;
 	vec3 normal = normalize(v_WorldNormal);
 	vec3 lightDir = vec3(-0.5, 0.5, 0.5);
 

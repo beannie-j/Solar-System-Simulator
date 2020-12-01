@@ -63,11 +63,17 @@ unsigned int Shader::CreateShader(const std::string& vertexShader, const std::st
     unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
     unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
 
-    glAttachShader(program, vs);
+    //Attaches a shader object to a program object
+    glAttachShader(program, vs); 
     glAttachShader(program, fs);
-    glLinkProgram(program);
-    glValidateProgram(program);
 
+    //links the program object specified by program. If any shader objects of type GL_VERTEX_SHADER are attached to program, they will be used to create an executable that will run on the programmable vertex processor.
+    glLinkProgram(program); 
+
+    //Validates a program object. checks to see whether the executables contained in program can execute given the current OpenGL state
+    glValidateProgram(program); 
+
+    //frees the memory and invalidates the name associated with the shader object specified by shader. This command effectively undoes the effects of a call to glCreateShader.
     glDeleteShader(vs);
     glDeleteShader(fs);
 
@@ -77,12 +83,12 @@ unsigned int Shader::CreateShader(const std::string& vertexShader, const std::st
 
 unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 {
-    unsigned int id = glCreateShader(type);
+    unsigned int id = glCreateShader(type); //glCreateShader — Creates a shader object. A shader object is used to maintain the source code strings that define a shader.
     const char* src = source.c_str();
-    glShaderSource(id, 1, &src, nullptr);
-    glCompileShader(id);
+    glShaderSource(id, 1, &src, nullptr); //glShaderSource — Replaces the source code in a shader object
+    glCompileShader(id); //compiles the source code strings that have been stored in the shader object specified by shader.
 
-    // TODO: Error Handling
+    // Error Handling
     int result;
     glGetShaderiv(id, GL_COMPILE_STATUS, &result);
 
@@ -91,6 +97,8 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
         int length;
         glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
         char* message = (char*)_malloca(length * sizeof(char));
+
+        //Returns the information log for a shader object
         glGetShaderInfoLog(id, length, &length, message);
         std::cout << "Failed to compile shader "
             << (type == GL_VERTEX_SHADER ? "vertex" : "fragment")
@@ -99,7 +107,6 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
         glDeleteShader(id);
         return 0;
     }
-
     return id;
 }
 

@@ -23,10 +23,6 @@
     * All images are from http://planetpixelemporium.com
 */
 
-/*
-* SFML version
-*/
-
 int main()
 {
     int width = 1900;
@@ -122,7 +118,6 @@ int main()
 */
 //#if 0
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 #include <iostream>
 #include <fstream>
@@ -139,10 +134,19 @@ int main()
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
+#include <array>
+
+#include <GLFW/glfw3.h>
+
+#define PI 3.14159265359
 int main(void)
 {
-    GLFWwindow* window;
+    GLFWwindow* window = nullptr;
 
     //Initialize the library
     if (!glfwInit())
@@ -153,8 +157,8 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     //Create a windowed mode window and its OpenGL context
-    int width = 1280;
-    int height = 1024;
+    int width = 1900;
+    int height = 1200;
 
     window = glfwCreateWindow(width, height, "Solar System Simulator", NULL, NULL);
     if (!window)
@@ -165,7 +169,6 @@ int main(void)
 
     //Make the window's context current
     glfwMakeContextCurrent(window);
-
     glfwSwapInterval(1);
 
     if (glewInit() != GLEW_OK)
@@ -248,39 +251,69 @@ int main(void)
 
     Shader shader("Simulator/res/shaders/Basic.shader");
     shader.Bind();
-    shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
+    shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f); 
 
     //Texture texture("Simulator/res/textures/planet-earth.png");
     //texture.Bind();
     //shader.SetUniform1i("u_Texture", 0);
   
-    va.Unbind();
+    va.Unbind(); 
     vb.Unbind();
     ib.Unbind();
     shader.Unbind();
 
     Renderer renderer;
+    
+    const char* glsl_version = "#version 130";
 
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init(glsl_version);
+
+    //glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, -1.5f, -1.0f, 1.0f); // 4 * 3 ratio, 2D rendering
+
+    /*
+        fov - field of view, fov Expressed in radians.
+        aspect ratio - viewport width/height
+        @param near Specifies the distance from the viewer to the near clipping plane (always positive).
+    /// @param far Specifies the distance from the viewer to the far clipping plane (always positive).
+    */
+
+    /*  move to the left 100, simulates moving camera to the right
+        glm::mat4 view = glm::translate(glm::vec3(-100, 0, 0));
+*/
+    static glm::vec3 translation = glm::vec3{ 0.0f, 1.0f, 3.0f };
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
     glm::mat4 projection = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 1000.0f);
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3{ 0.0f, 1.0f, 3.0f })
-        * glm::rotate(glm::mat4(1.0f), glm::radians(-20.0f), glm::vec3{1.0f, 0.0f, 0.0f});
+    glm::mat4 view = model * glm::rotate(glm::mat4(1.0f), glm::radians(-20.0f), glm::vec3{1.0f, 0.0f, 0.0f});
     view = glm::inverse(view);
 
-    float rotation = 0.0f;
+    float rotation = 0.0f; 
 
     glm::mat4 viewProj = projection * view;
 
     float r = 0.0f;
     float increment = 0.05f;
+
+    float angle = 0.0f;
+
     //Loop until the user closes the window
     while (!glfwWindowShouldClose(window))
     {
         float ts = 0.01667f;
-        rotation += 180.0f * ts;
+        //rotation += 180.0f * ts;
         glm::mat4 transform = glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3{ 0.0f, 1.0f, 0.0f });
 
         //Render here
         renderer.Clear();
+
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 
         shader.Bind();
         shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
@@ -296,12 +329,43 @@ int main(void)
 
         r += increment;
 
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+
+            ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+          
+            if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text("counter = %d", counter);
+
+            ImGui::SliderFloat3("Translation", glm::value_ptr(translation), 0.0f, 100.f);           
+
+            //angle in degrees = angle in radians * (180 / PI)
+            //angle in radians = angle in degrees * (PI / 180)
+
+            ImGui::SliderAngle("slider angle", &angle);
+
+            rotation = 180 * angle * (PI / 180);
+
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::End();
+        }
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         //Swap front and back buffers
         glfwSwapBuffers(window);
 
         //Poll for and process events
         glfwPollEvents();
     }
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 
     glfwTerminate();
     return 0;

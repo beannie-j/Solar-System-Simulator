@@ -44,6 +44,7 @@ project "SolarSystemSimulator"
 	{
 		"%{prj.location}/Simulator/src/vendor/stb_image/**.cpp",
 		"%{prj.location}/Simulator/src/vendor/stb_image/**.h",
+		"%{prj.location}/Dependencies/imgui/include/main.cpp"
 	}
 
 	includedirs
@@ -57,6 +58,7 @@ project "SolarSystemSimulator"
 		"%{prj.location}/Dependencies/SFML/include",
 		"%{prj.location}/Dependencies/glm/include",
 		"%{prj.location}/Simulator/src/Graphics",
+		"%{prj.location}/Dependencies/imgui/include"
 	}
 	
 	links 

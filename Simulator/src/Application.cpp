@@ -271,6 +271,11 @@ int main(void)
 
     ImGui::StyleColorsDark();
 
+    ImGuiIO& io = ImGui::GetIO();
+
+	ImFont* pFont = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\segoeui.ttf", 20.0f);
+	io.FontDefault = io.Fonts->Fonts.back();
+
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
@@ -286,10 +291,10 @@ int main(void)
     /*  move to the left 100, simulates moving camera to the right
         glm::mat4 view = glm::translate(glm::vec3(-100, 0, 0));
 */
-    static glm::vec3 translation = glm::vec3{ 0.0f, 1.0f, 3.0f };
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
+    static glm::vec3 translation = glm::vec3{ 0.0f, 0.0f, 0.0f };
     glm::mat4 projection = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 1000.0f);
-    glm::mat4 view = model * glm::rotate(glm::mat4(1.0f), glm::radians(-20.0f), glm::vec3{1.0f, 0.0f, 0.0f});
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3{ 0.0f, 1.0f, 3.0f })
+        * glm::rotate(glm::mat4(1.0f), glm::radians(-20.0f), glm::vec3{1.0f, 0.0f, 0.0f});
     view = glm::inverse(view);
 
     float rotation = 0.0f; 
@@ -306,7 +311,6 @@ int main(void)
     {
         float ts = 0.01667f;
         //rotation += 180.0f * ts;
-        glm::mat4 transform = glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3{ 0.0f, 1.0f, 0.0f });
 
         //Render here
         renderer.Clear();
@@ -318,8 +322,16 @@ int main(void)
         shader.Bind();
         shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
         shader.SetUniformMat4("u_ViewProjection", viewProj);
+
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation) * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3{ 0.0f, 1.0f, 0.0f });
         shader.SetUniformMat4("u_Transform", transform);
 
+        renderer.Draw(va, ib, shader);
+        
+        glm::vec3 translation2 = translation;
+        translation2.z += 2.0f;
+        transform = glm::translate(glm::mat4(1.0f), translation2) * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3{ 0.0f, 1.0f, 0.0f });
+        shader.SetUniformMat4("u_Transform", transform);
         renderer.Draw(va, ib, shader);
 
         if (r > 1.0f)
@@ -340,14 +352,15 @@ int main(void)
             ImGui::SameLine();
             ImGui::Text("counter = %d", counter);
 
-            ImGui::SliderFloat3("Translation", glm::value_ptr(translation), 0.0f, 100.f);           
+            ImGui::DragFloat3("Translation", glm::value_ptr(translation), 0.05f);
+            ImGui::SliderFloat("Rotation", &rotation, -180, 180);
 
             //angle in degrees = angle in radians * (180 / PI)
             //angle in radians = angle in degrees * (PI / 180)
 
-            ImGui::SliderAngle("slider angle", &angle);
+            //ImGui::SliderAngle("slider angle", &angle);
 
-            rotation = 180 * angle * (PI / 180);
+            //rotation = 180 * angle * (PI / 180);
 
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
             ImGui::End();
